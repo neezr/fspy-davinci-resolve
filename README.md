@@ -2,6 +2,8 @@
 
 Import a scene from [fSpy](https://fspy.io/) to a ```Camera3D```-node in DaVinci Resolve, to match the 3D camera positions.
 
+<img width="640" height="360" alt="Demo" src="https://github.com/user-attachments/assets/079d52b8-fddf-4648-aedf-0ac5a2a0211d" />
+
 
 ## Usage:
 - Download [fSpy](https://fspy.io/) and match a camera position using a reference image of your shot. Save the ```.fspy``` file.
