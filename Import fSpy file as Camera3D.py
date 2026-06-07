@@ -22,8 +22,22 @@ import json
 from struct import unpack
 from tkinter.filedialog import askopenfilename
 
+def guess_file_format(data: bytes):
+    # source for all magic numbers: https://en.wikipedia.org/wiki/List_of_file_signatures
+    if data.startswith(b"\x89\x50\x4E\x47\x0D\x0A\x1A\x0A"):
+        return "png"
+    elif data.startswith(b"\xFF\xD8\xFF"):
+        return "jpg"
+    elif data.startswith(b"\x52\x49\x46\x46"):
+        return "webp"
+    elif data.startswith(b"\x42\x4D"):
+        return "bmp"
+    elif data.startswith(b"\x47\x49\x46"):
+        return "gif" # chromium (= fspy) should understand static gif? so just to be sure
+    else:
+        return "png" # default
+
 fspy_file_path = askopenfilename(filetypes=[("fSpy file", "*.fspy")])
-img_file_path = fspy_file_path.replace(".fspy", "_fspy.png")
 
 # reading image data and state dict
 # file format specification: https://github.com/stuffmatic/fSpy/blob/develop/project_file_format.md
@@ -40,6 +54,8 @@ with open(fspy_file_path, mode="rb") as f:
     state_dict = json.loads(state_dict)
     
     image_data = f.read(img_buffer_size)
+    img_file_extension = guess_file_format(image_data)
+    img_file_path = fspy_file_path.replace(".fspy", f"_fspy.{img_file_extension}")
     with open(img_file_path, mode="wb") as f:
         f.write(image_data)
     
